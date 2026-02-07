@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Petugas Dashboard - Kosan Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">Petugas Dashboard</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Kamar Terisi</h5>
+                    <h3>{{ kamar_terisi }} / {{ total_kamar }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Penghuni Aktif</h5>
+                    <h3>{{ total_penghuni }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

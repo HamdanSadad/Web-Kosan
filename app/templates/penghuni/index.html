@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Data Penghuni - Kosan Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Data Penghuni</h2>
+        {% if current_user.role in ['admin', 'petugas'] %}
+        <a href="{{ url_for('penghuni.add') }}" class="btn btn-primary"><i class="fas fa-plus me-2"></i> Tambah
+            Penghuni</a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>No HP</th>
+                            <th>Kamar</th>
+                            <th>Tgl Masuk</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in penghuni_list %}
+                        <tr>
+                            <td>{{ p.nama }}<br><small class="text-muted">{{ p.nik }}</small></td>
+                            <td>{{ p.no_hp }}</td>
+                            <td>{{ p.kamar.nomor_kamar if p.kamar else '-' }}</td>
+                            <td>{{ p.tanggal_masuk.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <span
+                                    class="badge {% if p.status == 'Aktif' %}bg-success{% else %}bg-secondary{% endif %}">
+                                    {{ p.status }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if current_user.role in ['admin', 'petugas'] %}
+                                <a href="{{ url_for('penghuni.edit', id=p.id) }}" class="btn btn-sm btn-warning"><i
+                                        class="fas fa-edit"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

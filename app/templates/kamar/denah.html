@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Denah Kamar - Kosan Management{% endblock %}
+
+{% block extra_css %}
+<style>
+    .denah-container {
+        position: relative;
+        display: inline-block;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .denah-img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .kamar-dot {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: white;
+        font-weight: bold;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        transition: transform 0.2s;
+    }
+
+    .kamar-dot:hover {
+        transform: translate(-50%, -50%) scale(1.2);
+        z-index: 100;
+    }
+
+    .status-terisi {
+        background-color: #dc3545;
+    }
+
+    .status-kosong {
+        background-color: #198754;
+    }
+
+    .status-nonaktif {
+        background-color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">Denah Kamar Interaktif</h2>
+
+    <div class="row">
+        <div class="col-md-9 text-center">
+            <div class="denah-container" id="denahContainer">
+                <img src="{{ url_for('static', filename='img/denah.jpg') }}" class="denah-img" id="denahImg">
+                {% for kamar in kamar_list %}
+                <div class="kamar-dot status-{{ kamar.status | lower }}"
+                    style="left: {{ kamar.pos_x }}%; top: {{ kamar.pos_y }}%;" data-bs-toggle="modal"
+                    data-bs-target="#kamarModal" data-nomor="{{ kamar.nomor_kamar }}" data-tipe="{{ kamar.tipe_kamar }}"
+                    data-harga="{{ kamar.harga }}" data-status="{{ kamar.status }}"
+                    data-fasilitas="{{ kamar.fasilitas }}" title="Kamar {{ kamar.nomor_kamar }}">
+                    {{ kamar.nomor_kamar }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Keterangan</h5>
+                    <div class="mb-2"><span class="badge bg-success">&nbsp;&nbsp;</span> Kamar Kosong</div>
+                    <div class="mb-2"><span class="badge bg-danger">&nbsp;&nbsp;</span> Kamar Terisi</div>
+                    <div class="mb-2"><span class="badge bg-secondary">&nbsp;&nbsp;</span> Nonaktif</div>
+                    <hr>
+                    <p class="small text-muted">Klik pada nomor kamar untuk melihat detail.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detail Kamar -->
+<div class="modal fade" id="kamarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Kamar <span id="modalNomor"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Tipe:</strong> <span id="modalTipe"></span></p>
+                <p><strong>Harga:</strong> Rp <span id="modalHarga"></span></p>
+                <p><strong>Status:</strong> <span id="modalStatus" class="badge"></span></p>
+                <p><strong>Fasilitas:</strong></p>
+                <div id="modalFasilitas" class="p-2 bg-light border rounded"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const kamarModal = document.getElementById('kamarModal');
+    kamarModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const nomor = button.getAttribute('data-nomor');
+        const tipe = button.getAttribute('data-tipe');
+        const harga = parseFloat(button.getAttribute('data-harga')).toLocaleString('id-ID');
+        const status = button.getAttribute('data-status');
+        const fasilitas = button.getAttribute('data-fasilitas');
+
+        document.getElementById('modalNomor').textContent = nomor;
+        document.getElementById('modalTipe').textContent = tipe;
+        document.getElementById('modalHarga').textContent = harga;
+
+        const statusBadge = document.getElementById('modalStatus');
+        statusBadge.textContent = status;
+        statusBadge.className = 'badge ' + (status === 'Terisi' ? 'bg-danger' : (status === 'Kosong' ? 'bg-success' : 'bg-secondary'));
+
+        document.getElementById('modalFasilitas').textContent = fasilitas || 'Tidak ada keterangan fasilitas.';
+    });
+</script>
+{% endblock %}

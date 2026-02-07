@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Kosan Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="mb-4">{{ title }}</h2>
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nomor_kamar" class="form-label">Nomor Kamar</label>
+                            <input type="text" class="form-control" id="nomor_kamar" name="nomor_kamar"
+                                value="{{ kamar.nomor_kamar if kamar else '' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="tipe_kamar" class="form-label">Tipe Kamar</label>
+                            <select class="form-select" id="tipe_kamar" name="tipe_kamar" required>
+                                <option value="Standar" {% if kamar and kamar.tipe_kamar=='Standar' %}selected{% endif
+                                    %}>Standar</option>
+                                <option value="VIP" {% if kamar and kamar.tipe_kamar=='VIP' %}selected{% endif %}>VIP
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="harga" class="form-label">Harga per Bulan</label>
+                            <input type="number" class="form-control" id="harga" name="harga"
+                                value="{{ kamar.harga if kamar else '' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="Kosong" {% if kamar and kamar.status=='Kosong' %}selected{% endif %}>
+                                    Kosong</option>
+                                <option value="Terisi" {% if kamar and kamar.status=='Terisi' %}selected{% endif %}>
+                                    Terisi</option>
+                                <option value="Nonaktif" {% if kamar and kamar.status=='Nonaktif' %}selected{% endif %}>
+                                    Nonaktif</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fasilitas" class="form-label">Fasilitas</label>
+                        <textarea class="form-control" id="fasilitas" name="fasilitas"
+                            rows="3">{{ kamar.fasilitas if kamar else '' }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="pos_x" class="form-label">Posisi X (Denah)</label>
+                            <input type="number" class="form-control" id="pos_x" name="pos_x"
+                                value="{{ kamar.pos_x if kamar else 0 }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="pos_y" class="form-label">Posisi Y (Denah)</label>
+                            <input type="number" class="form-control" id="pos_y" name="pos_y"
+                                value="{{ kamar.pos_y if kamar else 0 }}">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('kamar.index') }}" class="btn btn-secondary">Batal</a>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

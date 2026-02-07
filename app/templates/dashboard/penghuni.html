@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Penghuni - Kosan Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">Halo, {{ current_user.username }}</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Informasi Kamar</h5>
+                    {% if penghuni %}
+                    <p><strong>Nama:</strong> {{ penghuni.nama }}</p>
+                    <p><strong>Kamar:</strong> {{ penghuni.kamar.nomor_kamar if penghuni.kamar else 'Belum ditentukan'
+                        }}</p>
+                    {% else %}
+                    <p>Data penghuni tidak ditemukan.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tagihan Belum Lunas</h5>
+                    {% if tagihan %}
+                    <ul class="list-group">
+                        {% for t in tagihan %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ t.bulan }}
+                            <span class="badge bg-danger rounded-pill">Rp {{ t.jumlah_bayar }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-success">Semua tagihan lunas!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

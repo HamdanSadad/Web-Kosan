@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Kosan Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center vh-100">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h3 class="text-center mb-4">Buat Akun Baru</h3>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Daftar Sebagai</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="penghuni">Penghuni Kos</option>
+                            <option value="petugas">Petugas Kos</option>
+                        </select>
+                        <div class="form-text">Pilih peran sesuai status Anda.</div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">Daftar</button>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary">Kembali ke Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
